@@ -18,7 +18,6 @@ class RestConnection {
             //TODO handle exceptions
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-            println(response.body!!.string())
             return  response.body?.let { return it.string() } ?: throw IOException("Malformed response") //TODO handle exception
         }
     }
