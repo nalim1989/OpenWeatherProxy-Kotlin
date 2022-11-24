@@ -3,26 +3,26 @@ package com.shapegames.response
 import com.beust.klaxon.Json
 
 class OpenWeatherV25Response(
-    val city: City,
+    val city: OpenWeatherV25City,
 
     @Json(name = "list")
-    val data: List<TemperatureData>
+    val data: List<OpenWeatherV25TemperatureData>
 ) {}
 
-class TemperatureData(
+class OpenWeatherV25TemperatureData(
     @Json(name = "dt")
-    val time: Int,
+    val time: Long,
 
     @Json(name = "main")
-    val temperature: Temperature
+    val temperature: OpenWeatherV25Temperature
 ) {}
 
-data class Temperature(
+data class OpenWeatherV25Temperature(
     @Json(name = "temp")
     val value: Float
 ){}
 
-data class City(
+data class OpenWeatherV25City(
     val id: Int,
     val name: String,
     val country: String

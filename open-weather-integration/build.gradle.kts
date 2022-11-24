@@ -7,4 +7,5 @@ kotlinProject()
 
 dependencies {
     implementation(project(":weather-connection"))
+    implementation(project(":weather-commons"))
 }

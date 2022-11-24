@@ -6,3 +6,8 @@ plugins {
 }
 
 kotlinProject()
+
+dependencies {
+    implementation(project(":weather-commons"))
+    implementation(project(":open-weather-integration"))
+}
