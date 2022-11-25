@@ -6,7 +6,6 @@ class OpenWeatherV25UrlBuilder {
     companion object{
 
         private const val VERSION = 2.5
-
         fun buildForecastDataUrl(location:Int):String{
 
             val url = StringBuilder("${OpenWeatherConstants.OPEN_WEATHER_BASE_URL}/data/${VERSION}/forecast")

@@ -1,13 +1,13 @@
-package com.shapegames.provider
+package com.shapegames.producer
 
 import com.shapegames.model.IWeatherDataProducer
-import com.shapegames.model.WeatherData
+import com.shapegames.model.CityWeatherData
 import com.shapegames.services.OpenWeatherService
 import com.shapegames.utils.toWeatherData
 
 class OpenWeatherDataProducer:IWeatherDataProducer {
 
-    override fun getWeather(cityId: Int): List<WeatherData> {
+    override fun getWeather(cityId: Int): CityWeatherData {
 
         val openWeatherService = OpenWeatherService()
         val openWeatherData = openWeatherService.getWeatherData(cityId)
