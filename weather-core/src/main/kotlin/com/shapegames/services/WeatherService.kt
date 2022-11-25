@@ -1,7 +1,7 @@
 package com.shapegames.services
 
 import com.shapegames.model.TemperatureData
-import com.shapegames.services.provider.WeatherDataProvider
+import com.shapegames.provider.WeatherDataProvider
 
 class WeatherService(
     private val weatherDataProvider: WeatherDataProvider
