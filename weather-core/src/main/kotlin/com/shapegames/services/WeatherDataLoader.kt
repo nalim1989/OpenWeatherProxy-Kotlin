@@ -1,5 +1,6 @@
 package com.shapegames.services
 
+import com.shapegames.exceptions.DataLoadException
 import com.shapegames.model.CityWeatherData
 import com.shapegames.model.IWeatherDataProducer
 import com.shapegames.model.WeatherData
@@ -24,7 +25,7 @@ class WeatherDataLoader(
         }
 
         //In case the valid data can not be loaded for any of producers
-        throw  Exception("Can not load data")
+        throw  DataLoadException("Not able to find any producer with valid data")
     }
 
 }

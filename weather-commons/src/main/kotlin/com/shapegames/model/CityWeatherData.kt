@@ -10,5 +10,5 @@ data class CityWeatherData(
 data class WeatherData(
     val temperature:Float,
     val forecastTime:Date
-    //Add weather details such as wind, clouds etc
+    //Add weather details such as wind, clouds etc.
 ){}

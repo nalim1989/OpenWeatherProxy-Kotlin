@@ -1,8 +1,8 @@
 package com.shapegames.rest
 
+import com.shapegames.exceptions.ConnectionException
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.io.IOException
 
 class RestConnection {
 
@@ -15,10 +15,9 @@ class RestConnection {
             .build()
 
         client.newCall(request).execute().use { response ->
-            //TODO handle exceptions
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            if (!response.isSuccessful) throw ConnectionException("Unexpected code ${response.code}")
 
-            return  response.body?.let { return it.string() } ?: throw IOException("Malformed response") //TODO handle exception
+            return  response.body?.let { return it.string() } ?: throw ConnectionException("Malformed response")
         }
     }
 }

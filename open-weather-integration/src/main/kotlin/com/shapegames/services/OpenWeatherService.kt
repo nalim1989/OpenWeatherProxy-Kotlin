@@ -1,6 +1,8 @@
 package com.shapegames.services
 
 import com.beust.klaxon.Klaxon
+import com.shapegames.exceptions.OpenWeatherConnectionException
+import com.shapegames.exceptions.OpenWeatherResponseException
 import com.shapegames.response.OpenWeatherV25Response
 import com.shapegames.rest.RestConnection
 import com.shapegames.utils.OpenWeatherV25UrlBuilder
@@ -11,16 +13,14 @@ class OpenWeatherService {
     fun getWeatherData(location:Int):OpenWeatherV25Response{
 
         val openWeatherUrl = OpenWeatherV25UrlBuilder.buildForecastDataUrl(location)
-        val weatherJson = RestConnection().syncGet(openWeatherUrl)
 
-        val weatherData:OpenWeatherV25Response? = try {
-            Klaxon().parse<OpenWeatherV25Response>(weatherJson)
+        try {
+            val weatherJson = RestConnection().syncGet(openWeatherUrl)
+            Klaxon().parse<OpenWeatherV25Response>(weatherJson)?.let { return  it } ?: throw  OpenWeatherResponseException()
         } catch (e:Exception){
-            // TODO handle the exception
-            throw  e
+            throw  OpenWeatherConnectionException(e)
         }
 
-        return weatherData?.let { return it } ?: throw Exception("") //TODO handle the exception
     }
 
 }
