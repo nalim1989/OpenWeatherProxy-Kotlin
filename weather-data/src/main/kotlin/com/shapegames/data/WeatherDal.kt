@@ -1,10 +1,13 @@
 package com.shapegames.data
 
+import com.shapegames.constants.DATA_EXPIRATION
 import com.shapegames.model.CityWeatherData
 import com.shapegames.model.WeatherData
 import com.shapegames.model.WeatherDataLoad
 import com.shapegames.utils.get24HoursFromNowTime
+import com.shapegames.utils.getTimeBefore
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.less
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 import java.util.Date
@@ -53,6 +56,19 @@ class WeatherDal(private val db: Database) {
                 this[WeatherTable.loadId] = loadId
             }
 
+        }
+    }
+
+    fun deleteInvalid(){
+        val depreciationTime = getTimeBefore(Date(), DATA_EXPIRATION)
+        transaction(db) {
+            val invalidLoads = DataLoadTable
+                .slice(DataLoadTable.id)
+                .select(DataLoadTable.loadTime.less(DateTime(depreciationTime)))
+                .toList().map { it[DataLoadTable.id] }.toList()
+
+            DataLoadTable.deleteWhere { DataLoadTable.id.inList(invalidLoads) }
+            WeatherTable.deleteWhere { WeatherTable.loadId.inList(invalidLoads) }
         }
     }
 

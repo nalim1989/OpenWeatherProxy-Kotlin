@@ -1,6 +1,7 @@
 package com.shapegames.utils
 
 import java.util.*
+import kotlin.time.Duration
 
 
 fun getTomorrowStartOfADay():Date{
@@ -39,6 +40,14 @@ fun get24HoursFromNowTime(time:Date):Date{
     val calendar: Calendar = Calendar.getInstance()
     calendar.time=time
     calendar.add(Calendar.DAY_OF_MONTH,1)
+
+    return calendar.time
+}
+
+fun getTimeBefore(time:Date, duration: Duration):Date{
+    val calendar: Calendar = Calendar.getInstance()
+    calendar.time=time
+    calendar.add(Calendar.HOUR, (-1* duration.inWholeHours).toInt())
 
     return calendar.time
 }
