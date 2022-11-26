@@ -4,6 +4,7 @@ include(
     "open-weather-integration",
     "weather-core",
     "weather-data",
+    "weather-rest-api",
     "weather-commons",
     "weather-app"
 )
