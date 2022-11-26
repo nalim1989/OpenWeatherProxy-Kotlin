@@ -1,6 +1,6 @@
 package com.shapegames.model
 
-object WeatherDataAcceptor {
+object WeatherDataAcceptors {
 
     private val acceptors:MutableList<IWeatherDataAcceptor> = mutableListOf()
 
@@ -9,10 +9,10 @@ object WeatherDataAcceptor {
     }
 
     fun sendNewDataNotification(data:CityWeatherData){
-        acceptors.parallelStream().forEach { it.acceptData(data) }
+        acceptors.parallelStream().forEach { it.acceptCityData(data) }
     }
 }
 
 interface IWeatherDataAcceptor{
-    fun acceptData(data:CityWeatherData)
+    fun acceptCityData(cityData:CityWeatherData)
 }

@@ -4,11 +4,13 @@ import com.shapegames.exceptions.DataLoadException
 import com.shapegames.model.CityWeatherData
 import com.shapegames.model.IWeatherDataProducer
 import com.shapegames.model.WeatherData
-import com.shapegames.model.WeatherDataAcceptor
+import com.shapegames.model.WeatherDataAcceptors
 import com.shapegames.producer.OpenWeatherDataProducer
 import com.shapegames.producer.WeatherDatabaseDataProducer
 import com.shapegames.utils.assertDataIsValid
+import mu.KotlinLogging
 
+private val logger = KotlinLogging.logger {}
 class WeatherDataLoader(
     private val openWeatherDataProducer: OpenWeatherDataProducer,
     private val weatherDatabaseDataProducer: WeatherDatabaseDataProducer
@@ -23,14 +25,14 @@ class WeatherDataLoader(
             try{
                 cityWeatherData = dataProducer.getWeather(cityId)
             } catch (e:Exception){ // Try another producer
-                //TODO log the error
+                logger.warn( "Weather data producer not working", e )
                 continue
             }
 
             // If data is valid(expected) return it, if not continue to fetch from another producer
             if(assertDataIsValid(cityWeatherData.weatherData)) {
                 //TODO make it async
-                WeatherDataAcceptor.sendNewDataNotification(cityWeatherData)
+                WeatherDataAcceptors.sendNewDataNotification(cityWeatherData)
                 return cityWeatherData.weatherData
             }
         }

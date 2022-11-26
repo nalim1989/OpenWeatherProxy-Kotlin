@@ -2,6 +2,7 @@ package com.shapegames.data
 
 import com.shapegames.model.CityWeatherData
 import com.shapegames.model.WeatherData
+import com.shapegames.model.WeatherDataLoad
 import com.shapegames.utils.get24HoursFromNowTime
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -11,38 +12,29 @@ import java.util.Date
 class WeatherDal(private val db: Database) {
 
     fun fetchLatestWeather(cityId: Int): CityWeatherData {
-        val later24hours = get24HoursFromNowTime(Date())
-        val weatherJoin = getWeatherLoadJoin()
-
         transaction(db) {
-
-            val latestLoad = weatherJoin
-                .slice(DataLoadTable.id, DataLoadTable.loadTime)
-                .select { WeatherTable.cityId.eq(cityId) and DataLoadTable.loadTime.lessEq(DateTime(later24hours))}
-                .maxBy { DataLoadTable.loadTime }
-
+            val latestLoad = fetchLatestLoad(cityId)
             val weatherData = WeatherTable
-                .select { WeatherTable.loadId.eq(latestLoad[DataLoadTable.id])}
+                .select { WeatherTable.loadId.eq(latestLoad.id)}
                 .toList().toWeatherData()
 
-            return@transaction CityWeatherData(cityId,weatherData,latestLoad[DataLoadTable.loadTime].toDate())
+            return@transaction CityWeatherData(cityId,weatherData,latestLoad.loadTime)
         }
 
          throw Exception("Something went wrong")
     }
 
-    fun fetchLatestLoadTime(cityId: Int): Date{
+    fun fetchLatestLoad(cityId: Int): WeatherDataLoad {
         val later24hours = get24HoursFromNowTime(Date())
         val weatherJoin = getWeatherLoadJoin()
 
         transaction(db) {
 
-            val latestLoad = weatherJoin
+            return@transaction weatherJoin
                 .slice(DataLoadTable.loadTime)
                 .select { WeatherTable.cityId.eq(cityId) and DataLoadTable.loadTime.lessEq(DateTime(later24hours))}
-                .maxBy { DataLoadTable.loadTime }
+                .maxBy { DataLoadTable.loadTime }.toWeatherDataLoad()
 
-            return@transaction latestLoad[DataLoadTable.loadTime]
         }
 
         throw Exception("Something went wrong")
