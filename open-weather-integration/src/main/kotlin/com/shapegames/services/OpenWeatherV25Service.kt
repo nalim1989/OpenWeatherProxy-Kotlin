@@ -8,7 +8,7 @@ import com.shapegames.rest.RestConnection
 import com.shapegames.utils.OpenWeatherV25UrlBuilder
 import java.lang.Exception
 
-class OpenWeatherService {
+class OpenWeatherV25Service {
 
     fun getWeatherData(location:Int):OpenWeatherV25Response{
 
@@ -16,11 +16,15 @@ class OpenWeatherService {
 
         try {
             val weatherJson = RestConnection().syncGet(openWeatherUrl)
-            Klaxon().parse<OpenWeatherV25Response>(weatherJson)?.let { return  it } ?: throw  OpenWeatherResponseException()
+            weatherJson?.let {
+                return convertJsonToOpenWeatherV25Response(it) } ?: throw OpenWeatherResponseException()
         } catch (e:Exception){
             throw  OpenWeatherConnectionException(e)
         }
 
     }
+
+    private fun convertJsonToOpenWeatherV25Response(json: String) : OpenWeatherV25Response =
+        Klaxon().parse<OpenWeatherV25Response>(json)?.let { return  it } ?: throw  OpenWeatherResponseException()
 
 }

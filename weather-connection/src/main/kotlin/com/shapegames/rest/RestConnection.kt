@@ -8,7 +8,7 @@ class RestConnection {
 
     private val client:OkHttpClient = OkHttpClient()
 
-    fun syncGet(url:String):String {
+    fun syncGet(url:String):String? {
         val request = Request.Builder()
             .get()
             .url(url)
@@ -17,7 +17,7 @@ class RestConnection {
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw ConnectionException("Unexpected code ${response.code}")
 
-            return  response.body?.let { return it.string() } ?: throw ConnectionException("Malformed response")
+            return  response.body?.string()
         }
     }
 }

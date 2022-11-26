@@ -3,14 +3,14 @@ package com.shapegames.services
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 
-class OpenWeatherServiceTest {
+class OpenWeatherV25ServiceTest {
 
-    private val openWeatherService = OpenWeatherService()
+    private val openWeatherV25Service = OpenWeatherV25Service()
 
     @Test
     fun `will successfully return`() {
         assertDoesNotThrow {
-            openWeatherService.getWeatherData(2172797)
+            openWeatherV25Service.getWeatherData(2172797)
         }
     }
 

@@ -2,16 +2,16 @@ package com.shapegames.producer
 
 import com.shapegames.model.IWeatherDataProducer
 import com.shapegames.model.CityWeatherData
-import com.shapegames.services.OpenWeatherService
-import com.shapegames.utils.toWeatherData
+import com.shapegames.services.OpenWeatherV25Service
+import com.shapegames.utils.toCityWeatherData
 
 class OpenWeatherDataProducer:IWeatherDataProducer {
 
     override fun getWeather(cityId: Int): CityWeatherData {
 
-        val openWeatherService = OpenWeatherService()
-        val openWeatherData = openWeatherService.getWeatherData(cityId)
+        val openWeatherV25Service = OpenWeatherV25Service()
+        val openWeatherData = openWeatherV25Service.getWeatherData(cityId)
 
-        return  openWeatherData.toWeatherData()
+        return  openWeatherData.toCityWeatherData()
     }
 }

@@ -5,7 +5,7 @@ import com.shapegames.model.CityWeatherData
 import com.shapegames.model.IWeatherDataProducer
 import com.shapegames.model.WeatherData
 import com.shapegames.producer.OpenWeatherDataProducer
-import com.shapegames.utils.DataQuality
+import com.shapegames.utils.assertDataIsValid
 
 class WeatherDataLoader(
     private val openWeatherDataProducer: OpenWeatherDataProducer
@@ -16,10 +16,16 @@ class WeatherDataLoader(
 
     fun loadTemperatureData(cityId:Int):List<WeatherData>{
         for (dataProducer in dataProducers){
-            val cityWeatherData:CityWeatherData = dataProducer.getWeather(cityId)
+            val cityWeatherData:CityWeatherData
+            try{
+                cityWeatherData = dataProducer.getWeather(cityId)
+            } catch (e:Exception){ // Try another producer
+                //TODO log the error
+                continue
+            }
 
             // If data is valid(expected) return it, if not continue to fetch from another producer
-            if(DataQuality.assertDataIsValid(cityWeatherData.weatherData)) {
+            if(assertDataIsValid(cityWeatherData.weatherData)) {
                 return cityWeatherData.weatherData
             }
         }
