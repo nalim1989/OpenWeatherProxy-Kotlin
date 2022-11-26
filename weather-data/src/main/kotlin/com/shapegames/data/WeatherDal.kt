@@ -1,5 +1,6 @@
 package com.shapegames.data
 
+import com.shapegames.model.CityWeatherData
 import com.shapegames.model.WeatherData
 import com.shapegames.utils.get24HoursFromNowTime
 import org.jetbrains.exposed.sql.*
@@ -9,19 +10,42 @@ import java.util.Date
 
 class WeatherDal(private val db: Database) {
 
-    fun fetchWeather(cityId: Int): List<WeatherData> {
+    fun fetchLatestWeather(cityId: Int): CityWeatherData {
         val later24hours = get24HoursFromNowTime(Date())
-        val weatherJoin = Join(
-            WeatherTable, DataLoadTable,
-            onColumn = WeatherTable.loadId, otherColumn = DataLoadTable.id,
-            joinType = JoinType.INNER)
-        // transaction(db) runs the internal query as a new database transaction.
-        return transaction(db) {
-            // Returns the first invoice with matching id.
-            weatherJoin
+        val weatherJoin = getWeatherLoadJoin()
+
+        transaction(db) {
+
+            val latestLoad = weatherJoin
+                .slice(DataLoadTable.id, DataLoadTable.loadTime)
                 .select { WeatherTable.cityId.eq(cityId) and DataLoadTable.loadTime.lessEq(DateTime(later24hours))}
+                .maxBy { DataLoadTable.loadTime }
+
+            val weatherData = WeatherTable
+                .select { WeatherTable.loadId.eq(latestLoad[DataLoadTable.id])}
                 .toList().toWeatherData()
+
+            return@transaction CityWeatherData(cityId,weatherData,latestLoad[DataLoadTable.loadTime].toDate())
         }
+
+         throw Exception("Something went wrong")
+    }
+
+    fun fetchLatestLoadTime(cityId: Int): Date{
+        val later24hours = get24HoursFromNowTime(Date())
+        val weatherJoin = getWeatherLoadJoin()
+
+        transaction(db) {
+
+            val latestLoad = weatherJoin
+                .slice(DataLoadTable.loadTime)
+                .select { WeatherTable.cityId.eq(cityId) and DataLoadTable.loadTime.lessEq(DateTime(later24hours))}
+                .maxBy { DataLoadTable.loadTime }
+
+            return@transaction latestLoad[DataLoadTable.loadTime]
+        }
+
+        throw Exception("Something went wrong")
     }
 
     fun insertWeather(cityId: Int, data:List<WeatherData>, loadTime:Date){
@@ -39,4 +63,10 @@ class WeatherDal(private val db: Database) {
 
         }
     }
+
+    private fun getWeatherLoadJoin() =
+        Join(
+            WeatherTable, DataLoadTable,
+            onColumn = WeatherTable.loadId, otherColumn = DataLoadTable.id,
+            joinType = JoinType.INNER)
 }

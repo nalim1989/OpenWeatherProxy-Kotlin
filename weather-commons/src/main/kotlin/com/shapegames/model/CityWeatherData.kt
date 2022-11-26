@@ -4,7 +4,8 @@ import java.util.*
 
 data class CityWeatherData(
     val cityId: Int,
-    val weatherData: List<WeatherData>
+    val weatherData: List<WeatherData>,
+    val loadTime:Date
 )
 
 data class WeatherData(

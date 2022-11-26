@@ -9,6 +9,6 @@ class WeatherDatabaseDataProducer(
 ): IWeatherDataProducer {
 
     override fun getWeather(cityId: Int): CityWeatherData {
-        return CityWeatherData(cityId, dal.fetchWeather(cityId))
+        return dal.fetchLatestWeather(cityId)
     }
 }

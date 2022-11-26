@@ -5,9 +5,10 @@ import com.shapegames.model.CityWeatherData
 import com.shapegames.response.OpenWeatherV25Response
 import java.util.*
 
-fun OpenWeatherV25Response.toCityWeatherData() =
+fun OpenWeatherV25Response.toCityWeatherData(loadTime:Date) =
     CityWeatherData(
         this.city.id,
-        this.data.stream().map { d ->  WeatherData(d.temperature.value, Date(d.time))}.toList()
+        this.data.stream().map { d ->  WeatherData(d.temperature.value, Date(d.time))}.toList(),
+        loadTime
     )
 

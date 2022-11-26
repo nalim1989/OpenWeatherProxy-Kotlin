@@ -4,6 +4,7 @@ import com.shapegames.model.IWeatherDataProducer
 import com.shapegames.model.CityWeatherData
 import com.shapegames.services.OpenWeatherV25Service
 import com.shapegames.utils.toCityWeatherData
+import java.util.*
 
 class OpenWeatherDataProducer:IWeatherDataProducer {
 
@@ -12,6 +13,6 @@ class OpenWeatherDataProducer:IWeatherDataProducer {
         val openWeatherV25Service = OpenWeatherV25Service()
         val openWeatherData = openWeatherV25Service.getWeatherData(cityId)
 
-        return  openWeatherData.toCityWeatherData()
+        return  openWeatherData.toCityWeatherData(Date())
     }
 }

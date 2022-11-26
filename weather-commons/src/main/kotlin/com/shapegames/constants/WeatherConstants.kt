@@ -1,4 +1,4 @@
-package com.shapegames.model.constants
+package com.shapegames.constants
 
 import kotlin.time.Duration.Companion.hours
 

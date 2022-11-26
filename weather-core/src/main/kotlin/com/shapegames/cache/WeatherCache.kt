@@ -1,7 +1,7 @@
 package com.shapegames.cache
 
 import com.shapegames.model.WeatherData
-import com.shapegames.model.constants.DATA_EXPIRATION
+import com.shapegames.constants.DATA_EXPIRATION
 import com.shapegames.services.WeatherDataLoader
 import io.github.reactivecircus.cache4k.Cache
 
