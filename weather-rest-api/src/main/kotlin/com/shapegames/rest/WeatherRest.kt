@@ -1,12 +1,15 @@
 package com.shapegames.rest
 
+import com.shapegames.handler.WeatherRestHandler
 import io.javalin.Javalin
-import mu.KotlinLogging
 import io.javalin.apibuilder.ApiBuilder.*
+import mu.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-class WeatherRest: Runnable {
+class WeatherRest(
+    private val weatherRestHandler: WeatherRestHandler
+): Runnable {
 
     override fun run() {
         app.start(6655)
@@ -43,13 +46,21 @@ class WeatherRest: Runnable {
                         path("summary") {
                             // URL: /rest/v1/weather/summary
                             get {
-                                it.json("ok")
+                                val cityIds = it.queryParams("locations")
+                                val temperature = it.queryParam("temperature")
+                                val unit = it.queryParam("unit")
+
+                                val response=weatherRestHandler.handleTemperatureSummaryRequest(cityIds,temperature,unit)
+                                it.json(response)
                             }
                         }
-                        path("locations") {
-                            // URL: /rest/v1/weather/summary/locations/
+                        path("locations/:cityId") {
+                            // URL: /rest/v1/weather/summary/locations/{cityId}
                             get {
-                                it.json("ok")
+                                val cityIds = it.queryParams("cityId")
+
+                                val response = weatherRestHandler.handleWeatherRequest(cityIds)
+                                it.json(response)
                             }
                         }
                     }

@@ -11,7 +11,7 @@ class WeatherService(
         return weatherDataProvider.get5DaysWeather(cityId)
    }
 
-    fun getFavouritesAboveTemp(temperature:Int, cityIds:Set<Int>):Set<Int>{
+    fun getFavouritesAboveTemp(temperature:Float, cityIds:Set<Int>):Set<Int>{
         val citiesWithHigherTemp = mutableSetOf<Int>()
 
         //Check of temperatures can be done in parallel since it is an independent operation
