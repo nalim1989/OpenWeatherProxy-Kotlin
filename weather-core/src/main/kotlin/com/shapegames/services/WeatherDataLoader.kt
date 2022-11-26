@@ -5,14 +5,16 @@ import com.shapegames.model.CityWeatherData
 import com.shapegames.model.IWeatherDataProducer
 import com.shapegames.model.WeatherData
 import com.shapegames.producer.OpenWeatherDataProducer
+import com.shapegames.producer.WeatherDatabaseDataProducer
 import com.shapegames.utils.assertDataIsValid
 
 class WeatherDataLoader(
-    private val openWeatherDataProducer: OpenWeatherDataProducer
+    private val openWeatherDataProducer: OpenWeatherDataProducer,
+    private val weatherDatabaseDataProducer: WeatherDatabaseDataProducer
 ) {
 
     //The order is important, try local storage first and then switch to more "expensive" options
-    private val dataProducers:Set<IWeatherDataProducer> = linkedSetOf(openWeatherDataProducer)
+    private val dataProducers:Set<IWeatherDataProducer> = linkedSetOf(openWeatherDataProducer,weatherDatabaseDataProducer)
 
     fun loadTemperatureData(cityId:Int):List<WeatherData>{
         for (dataProducer in dataProducers){

@@ -1,14 +1,12 @@
 package com.shapegames.cache
 
 import com.shapegames.model.WeatherData
+import com.shapegames.model.constants.DATA_EXPIRATION
 import com.shapegames.services.WeatherDataLoader
 import io.github.reactivecircus.cache4k.Cache
-import kotlin.time.Duration.Companion.hours
 
 //Current cache size is set to 1000, but could be tuned according to the statistics
 const val MAX_CACHE_SIZE = 1000L
-//Current expiration is set to 24 hours, but could be tuned according to the statistics
-val DATA_EXPIRATION = 24.hours
 
 class WeatherCache(
     private val dataLoader: WeatherDataLoader

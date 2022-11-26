@@ -35,3 +35,11 @@ fun get5DaysStartOfADay():Date{
     return calendar.time
 }
 
+fun get24HoursFromNowTime(time:Date):Date{
+    val calendar: Calendar = Calendar.getInstance()
+    calendar.time=time
+    calendar.add(Calendar.DAY_OF_MONTH,1)
+
+    return calendar.time
+}
+

@@ -1,6 +1,6 @@
 package com.shapegames.model
 
-import java.util.Date
+import java.util.*
 
 data class CityWeatherData(
     val cityId: Int,
@@ -9,6 +9,6 @@ data class CityWeatherData(
 
 data class WeatherData(
     val temperature:Float,
-    val forecastTime:Date
+    val forecastTime: Date
     //Add weather details such as wind, clouds etc.
 )
