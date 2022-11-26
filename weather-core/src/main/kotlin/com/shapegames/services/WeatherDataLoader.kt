@@ -5,21 +5,15 @@ import com.shapegames.model.CityWeatherData
 import com.shapegames.model.IWeatherDataProducer
 import com.shapegames.model.WeatherData
 import com.shapegames.model.WeatherDataAcceptors
-import com.shapegames.producer.OpenWeatherDataProducer
-import com.shapegames.producer.WeatherDatabaseDataProducer
 import com.shapegames.utils.assertDataIsValid
 import mu.KotlinLogging
 import kotlin.concurrent.thread
 
 private val logger = KotlinLogging.logger {}
 class WeatherDataLoader(
-    private val openWeatherDataProducer: OpenWeatherDataProducer,
-    private val weatherDatabaseDataProducer: WeatherDatabaseDataProducer
+    //The order is important
+    private val dataProducers:Set<IWeatherDataProducer>
 ) {
-
-    //The order is important, try local storage first and then switch to more "expensive" options
-    private val dataProducers:Set<IWeatherDataProducer> = linkedSetOf(openWeatherDataProducer,weatherDatabaseDataProducer)
-
     fun loadTemperatureData(cityId:Int):List<WeatherData>{
         for (dataProducer in dataProducers){
             val cityWeatherData:CityWeatherData
