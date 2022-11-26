@@ -9,6 +9,7 @@ import com.shapegames.producer.OpenWeatherDataProducer
 import com.shapegames.producer.WeatherDatabaseDataProducer
 import com.shapegames.utils.assertDataIsValid
 import mu.KotlinLogging
+import kotlin.concurrent.thread
 
 private val logger = KotlinLogging.logger {}
 class WeatherDataLoader(
@@ -31,8 +32,11 @@ class WeatherDataLoader(
 
             // If data is valid(expected) return it, if not continue to fetch from another producer
             if(assertDataIsValid(cityWeatherData.weatherData)) {
-                //TODO make it async
-                WeatherDataAcceptors.sendNewDataNotification(cityWeatherData)
+                //Do not want to wait for all those tasks to finish
+                //Do not want to failure in the data storage affects current thread
+                thread {
+                    WeatherDataAcceptors.sendNewDataNotification(cityWeatherData)
+                }.start()
                 return cityWeatherData.weatherData
             }
         }
