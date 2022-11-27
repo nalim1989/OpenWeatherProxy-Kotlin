@@ -16,9 +16,8 @@ class DatabaseWeatherDataAcceptor(
     override fun acceptCityData(cityData: CityWeatherData) {
         val latestLoad = dal.fetchLatestLoad(cityData.cityId)
 
-        if(cityData.loadTime.after(latestLoad.loadTime)){
+        if(latestLoad == null || cityData.loadTime.after(latestLoad.loadTime)){
             dal.insertWeather(cityData.cityId, cityData.weatherData, cityData.loadTime)
-
         }
     }
 }

@@ -52,3 +52,10 @@ fun getTimeBefore(time:Date, duration: Duration):Date{
     return calendar.time
 }
 
+fun getTimeAfter(time:Date, duration: Duration):Date{
+    val calendar: Calendar = Calendar.getInstance()
+    calendar.time=time
+    calendar.add(Calendar.HOUR, (duration.inWholeHours).toInt())
+
+    return calendar.time
+}

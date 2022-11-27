@@ -30,7 +30,7 @@ class WeatherCache(
 
         //Any exceptions thrown by the loader will be propagated to the caller of this function.
         return weatherCache.get(cityId) {
-                logger.info { "Non cached value for $cityId" }
+                logger.warn { "Non cached value for $cityId" }
                 dataLoader.loadWeatherData(cityId)
         }
     }

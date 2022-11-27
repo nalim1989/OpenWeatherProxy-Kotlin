@@ -1,11 +1,9 @@
 package com.shapegames.data
 
 import com.shapegames.constants.DATA_EXPIRATION
-import com.shapegames.exceptions.DatabaseException
 import com.shapegames.model.CityWeatherData
 import com.shapegames.model.WeatherData
 import com.shapegames.model.WeatherDataLoad
-import com.shapegames.utils.get24HoursFromNowTime
 import com.shapegames.utils.getTimeBefore
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.less
@@ -15,33 +13,38 @@ import java.util.Date
 
 class WeatherDal(private val db: Database) {
 
-    fun fetchLatestWeather(cityId: Int): CityWeatherData {
+    fun fetchLatestWeather(cityId: Int): CityWeatherData? {
+        var result:CityWeatherData?=null
+
         transaction(db) {
             val latestLoad = fetchLatestLoad(cityId)
-            val weatherData = WeatherTable
-                .select { WeatherTable.loadId.eq(latestLoad.id)}
-                .toList().toWeatherData()
+            latestLoad?.let {
+                val weatherData = WeatherTable
+                    .select { WeatherTable.loadId.eq(latestLoad.id) }
+                    .toList().toWeatherData()
 
-            return@transaction CityWeatherData(cityId,weatherData,latestLoad.loadTime)
+                result = CityWeatherData(cityId, weatherData, latestLoad.loadTime)
+            }
         }
 
-         throw DatabaseException("Can not fetch latest weather data")
+         return result
     }
 
-    fun fetchLatestLoad(cityId: Int): WeatherDataLoad {
-        val later24hours = get24HoursFromNowTime(Date())
+    fun fetchLatestLoad(cityId: Int): WeatherDataLoad? {
         val weatherJoin = getWeatherLoadJoin()
 
+        var result:WeatherDataLoad?=null
         transaction(db) {
 
-            return@transaction weatherJoin
+            result = weatherJoin
                 .slice(DataLoadTable.loadTime)
-                .select { WeatherTable.cityId.eq(cityId) and DataLoadTable.loadTime.lessEq(DateTime(later24hours))}
-                .maxBy { DataLoadTable.loadTime }.toWeatherDataLoad()
+                .select { WeatherTable.cityId.eq(cityId)}
+                .maxByOrNull { DataLoadTable.loadTime }?.toWeatherDataLoad()
+
 
         }
 
-        throw DatabaseException("Can not fetch latest load data")
+        return result
     }
 
     fun insertWeather(cityId: Int, data:List<WeatherData>, loadTime:Date){

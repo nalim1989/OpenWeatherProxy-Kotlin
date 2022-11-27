@@ -2,7 +2,7 @@ package com.shapegames.provider
 
 import com.shapegames.cache.WeatherCache
 import com.shapegames.model.WeatherData
-import com.shapegames.utils.assertDataIsValid
+import com.shapegames.utils.dataContainsNecessaryInformation
 import com.shapegames.utils.getTomorrowEndOfADay
 import com.shapegames.utils.getTomorrowStartOfADay
 import kotlinx.coroutines.runBlocking
@@ -22,7 +22,7 @@ class WeatherDataProvider(
             //e.g. The data is less than 24h old but does not contain information for today + 5
             //In that case invalidate the cache and do the fetch again
             //There is DataQuality assertion on the cache load which prevents data to be invalid again after load
-            if(!assertDataIsValid(fiveDayTemperatures)){
+            if(!dataContainsNecessaryInformation(fiveDayTemperatures)){
                 cache.invalidateWeatherData(cityId)
                 fiveDayTemperatures=get5DaysWeather(cityId)
             }
