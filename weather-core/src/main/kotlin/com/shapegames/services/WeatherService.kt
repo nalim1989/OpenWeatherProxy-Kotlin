@@ -2,6 +2,9 @@ package com.shapegames.services
 
 import com.shapegames.model.WeatherData
 import com.shapegames.provider.WeatherDataProvider
+import mu.KotlinLogging
+
+private val logger = KotlinLogging.logger {}
 
 class WeatherService(
     private val weatherDataProvider: WeatherDataProvider
@@ -16,8 +19,10 @@ class WeatherService(
 
         //Check of temperatures can be done in parallel since it is an independent operation
         cityIds.parallelStream().forEach {
+            val nextDayWeather = weatherDataProvider.getNextDayWeather(it)
+            logger.info { "Next day weather:" + nextDayWeather.map { w -> w.temperature }.toList() }
             // There is at least one moment tomorrow then temperature will be above requested temperature
-             val higherTempExists = weatherDataProvider.getNextDayWeather(it).any{ cityTemp -> cityTemp.temperature > temperature}
+             val higherTempExists = nextDayWeather.any{ cityTemp -> cityTemp.temperature > temperature}
              if(higherTempExists) citiesWithHigherTemp.add(it) //If there is such, add the city to the result
         }
 

@@ -11,6 +11,8 @@ class OpenWeatherV25UrlBuilder {
 
             val url = StringBuilder("${OPEN_WEATHER_BASE_URL}/data/${VERSION}/forecast")
             url.append("?")
+            url.append("units=metric")
+            url.append("&")
             url.append("id=").append(location)
             url.append("&")
             url.append("appid=").append(OPEN_WEATHER_API_KEY)
