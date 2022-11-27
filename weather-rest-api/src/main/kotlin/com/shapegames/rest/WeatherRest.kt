@@ -1,5 +1,6 @@
 package com.shapegames.rest
 
+import com.shapegames.exceptions.ValidationException
 import com.shapegames.handler.WeatherRestHandler
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
@@ -19,9 +20,14 @@ class WeatherRest(
     private val app = Javalin
         .create()
         .apply {
+            exception(ValidationException::class.java) { e, ctx ->
+                logger.error(e) { "Validation exception" }
+                ctx.status(400)
+            }
             // Unexpected exception: return HTTP 500
-            exception(Exception::class.java) { e, _ ->
+            exception(Exception::class.java) { e, ctx ->
                 logger.error(e) { "Internal server error" }
+                ctx.status(500)
             }
             // On 404: return message
             error(404) { ctx -> ctx.json("not found") }
