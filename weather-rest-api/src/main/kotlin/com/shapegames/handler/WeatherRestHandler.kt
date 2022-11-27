@@ -10,6 +10,7 @@ import com.shapegames.utils.toSummaryResponse
 import com.shapegames.utils.toWeatherForecastData
 import com.shapegames.validation.validateFloatParam
 import com.shapegames.validation.validateIntegerListParam
+import com.shapegames.validation.validateIntegerParam
 import com.shapegames.validation.validateTemperatureUnitsParam
 
 class WeatherRestHandler(
@@ -29,16 +30,11 @@ class WeatherRestHandler(
         return summary.toSummaryResponse()
     }
 
-    fun handleWeatherRequest(cityIds:List<String>): WeatherForecastResponse {
-        val validatedCityIds = validateIntegerListParam(param = cityIds, paramName = "cityIds")
+    fun handleWeatherRequest(cityId:String?): WeatherForecastResponse {
+        val validatedCityId = validateIntegerParam(cityId,"cityId")
 
-        val cityForecasts:MutableList<CityWeatherForecastData> = mutableListOf()
-        //TODO think about parallelism
-        validatedCityIds.stream().forEach{
-            val forecastData = weatherService.get5DayWeather(it).toWeatherForecastData()
-            cityForecasts.add(CityWeatherForecastData(it, forecastData))
-        }
+        val forecastData = weatherService.get5DayWeather(validatedCityId).toWeatherForecastData()
 
-        return WeatherForecastResponse(cityForecasts)
+        return WeatherForecastResponse(listOf(CityWeatherForecastData(validatedCityId,forecastData)))
     }
 }

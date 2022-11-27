@@ -54,12 +54,12 @@ class WeatherRest(
                                 it.json(response)
                             }
                         }
-                        path("locations/:cityId") {
-                            // URL: /rest/v1/weather/summary/locations/{cityId}
+                        path("locations/{cityId}") {
+                            // URL: /rest/v1/weather/locations/{cityId}
                             get {
-                                val cityIds = it.queryParams("cityId")
+                                val cityId = it.pathParam("cityId")
 
-                                val response = weatherRestHandler.handleWeatherRequest(cityIds)
+                                val response = weatherRestHandler.handleWeatherRequest(cityId)
                                 it.json(response)
                             }
                         }

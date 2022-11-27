@@ -14,7 +14,7 @@ class WeatherDataLoader(
     //The order is important
     private val dataProducers:Set<IWeatherDataProducer>
 ) {
-    fun loadTemperatureData(cityId:Int):List<WeatherData>{
+    fun loadWeatherData(cityId:Int):List<WeatherData>{
         for (dataProducer in dataProducers){
             val cityWeatherData:CityWeatherData
             try{
@@ -26,12 +26,15 @@ class WeatherDataLoader(
 
             // If data is valid(expected) return it, if not continue to fetch from another producer
             if(assertDataIsValid(cityWeatherData.weatherData)) {
+                logger.info { "Data accepted" }
                 //Do not want to wait for all those tasks to finish
                 //Do not want to failure in the data storage affects current thread
                 thread {
                     WeatherDataAcceptors.sendNewDataNotification(cityWeatherData)
-                }.start()
+                }
                 return cityWeatherData.weatherData
+            } else {
+                logger.info { "Data is not valid. Try another producer" }
             }
         }
 

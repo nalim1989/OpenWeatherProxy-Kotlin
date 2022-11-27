@@ -1,4 +1,6 @@
-import com.shapegames.DatabaseMaintenance
+@file:JvmName("WeatherApp")
+
+import com.shapegames.services.DatabaseMaintenance
 import com.shapegames.acceptor.DatabaseWeatherDataAcceptor
 import com.shapegames.cache.WeatherCache
 import com.shapegames.data.DataLoadTable
@@ -19,7 +21,6 @@ import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.io.File
 import java.sql.Connection
 
 fun main() {
@@ -43,7 +44,7 @@ fun main() {
     val dal = WeatherDal(db = db)
     DatabaseWeatherDataAcceptor(dal) //Register new data acceptor
     val databaseDataProducer = WeatherDatabaseDataProducer(dal)
-    val databaseMaintenance=DatabaseMaintenance(dal)
+    val databaseMaintenance= DatabaseMaintenance(dal)
     databaseMaintenance.deleteInvalidData() // Clean data on startup
 
     // Set up open weather integration
@@ -52,7 +53,7 @@ fun main() {
 
     // Set up core services
     //The order is important, try local storage first and then switch to more "expensive" options
-    val dataProducers:Set<IWeatherDataProducer> = linkedSetOf(openWeatherProducer,databaseDataProducer)
+    val dataProducers:Set<IWeatherDataProducer> = linkedSetOf(databaseDataProducer, openWeatherProducer)
     val weatherDataLoader= WeatherDataLoader(dataProducers)
     val cache = WeatherCache(weatherDataLoader)
     val weatherDataProvider = WeatherDataProvider(cache)

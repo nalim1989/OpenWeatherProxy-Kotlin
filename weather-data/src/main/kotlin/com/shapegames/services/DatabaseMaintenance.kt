@@ -1,4 +1,4 @@
-package com.shapegames
+package com.shapegames.services
 
 import com.shapegames.data.WeatherDal
 
