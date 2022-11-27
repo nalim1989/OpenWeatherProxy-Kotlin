@@ -15,7 +15,7 @@ class OpenWeatherV25Service {
         val openWeatherUrl = OpenWeatherV25UrlBuilder.buildForecastDataUrl(location)
 
         try {
-            val weatherJson = RestConnection().syncGet(openWeatherUrl)
+            val weatherJson = RestConnection.syncGet(openWeatherUrl)
             weatherJson?.let {
                 return convertJsonToOpenWeatherV25Response(it) } ?: throw OpenWeatherResponseException()
         } catch (e:Exception){

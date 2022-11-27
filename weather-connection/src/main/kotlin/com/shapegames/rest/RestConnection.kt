@@ -4,9 +4,9 @@ import com.shapegames.exceptions.ConnectionException
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-class RestConnection {
+object RestConnection {
 
-    private val client:OkHttpClient = OkHttpClient()
+    private var client:OkHttpClient = OkHttpClient()
 
     fun syncGet(url:String):String? {
         val request = Request.Builder()

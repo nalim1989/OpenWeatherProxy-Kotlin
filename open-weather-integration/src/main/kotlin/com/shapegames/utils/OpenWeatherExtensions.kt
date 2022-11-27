@@ -9,7 +9,9 @@ fun OpenWeatherV25Response.toCityWeatherData(loadTime:Date) =
     CityWeatherData(
         this.city.id,
         //multiply unix-time by 1000, since java is expecting milliseconds
-        this.data.map {WeatherData(it.temperature.value, Date(it.time * 1000))}.toList(),
+        this.data.map {WeatherData(it.temperature.value, Date(it.time.fromUnixDateToJavaDate()))}.toList(),
         loadTime
     )
 
+fun Long.fromUnixDateToJavaDate():Long =
+        this * 1000
