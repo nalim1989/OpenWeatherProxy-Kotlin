@@ -14,8 +14,8 @@ fun Project.kotlinProject() {
         "implementation"(kotlin("stdlib"))
 
         // Logging
-        "implementation"("org.slf4j:slf4j-simple:1.7.36")
-        "implementation"("io.github.microutils:kotlin-logging:1.7.8")
+        "implementation"("org.slf4j:slf4j-simple:2.0.5")
+        "implementation"("io.github.microutils:kotlin-logging:3.0.4")
 
         // JSON handling
         "implementation"("com.beust:klaxon:5.6")
