@@ -52,7 +52,7 @@ class WeatherRest(
                         path("summary") {
                             // URL: /rest/v1/weather/summary
                             get {
-                                val cityIds = it.queryParams("locations")
+                                val cityIds = it.queryParam("locations")
                                 val temperature = it.queryParam("temperature")
                                 val unit = it.queryParam("unit")
 

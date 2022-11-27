@@ -24,8 +24,8 @@ fun validateFloatParam(param:String?, paramName:String):Float{
     } ?: throw ValidationException("Data type $paramName is not set")
 }
 
-fun validateIntegerListParam(param:List<String>, paramName:String):List<Int>{
-    if(param.isNotEmpty()){
+fun validateIntegerListParam(param:List<String>?, paramName:String):List<Int>{
+    if(!param.isNullOrEmpty()){
         try {
             return param.map { it.toInt() }.toList()
         } catch (e:Exception){

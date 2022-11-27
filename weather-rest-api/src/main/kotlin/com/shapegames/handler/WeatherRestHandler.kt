@@ -17,8 +17,8 @@ class WeatherRestHandler(
     private val weatherService: WeatherService
 ) {
 
-    fun handleTemperatureSummaryRequest(cityIds:List<String>, temperature:String?, units:String?): SummaryResponse {
-        val validatedCityIds = validateIntegerListParam(param = cityIds, paramName = "cityIds")
+    fun handleTemperatureSummaryRequest(cityIds:String?, temperature:String?, units:String?): SummaryResponse {
+        val validatedCityIds = validateIntegerListParam(param = cityIds?.split(","), paramName = "cityIds")
         val validatedTemperature = validateFloatParam(param = temperature, paramName = "temperature")
         val validatedTemperatureUnits = validateTemperatureUnitsParam(param=units, "units")
 
