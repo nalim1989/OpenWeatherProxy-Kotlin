@@ -7,11 +7,10 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 
+private const val CITY_ID = 99
+private const val TEMPERATURE_FAHRENHEITS=300.0f
+private const val TEMPERATURE_CELSIUS=25.0f
 class WeatherRestHandlerTest {
-
-    private val CITY_ID = 99
-    private val TEMPERATURE_FAHRENHEITS=300.0f
-    private val TEMPERATURE_CELSIUS=25.0f
 
     private val weatherService = mockk<WeatherService>()
     private val weatherRestHandler = WeatherRestHandler(weatherService)
@@ -20,7 +19,7 @@ class WeatherRestHandlerTest {
     fun `will handle fahrenheit correctly`() {
         every { weatherService.getFavouritesAboveTemp(any(),any()) } answers { setOf() }
 
-        weatherRestHandler.handleTemperatureSummaryRequest(listOf(CITY_ID.toString()),TEMPERATURE_FAHRENHEITS.toString(), "FAHRENHEIT")
+        weatherRestHandler.handleTemperatureSummaryRequest(CITY_ID.toString(),TEMPERATURE_FAHRENHEITS.toString(), "FAHRENHEIT")
 
         verify {
             weatherService.getFavouritesAboveTemp(fahrenheitToCelsius(TEMPERATURE_FAHRENHEITS), setOf(CITY_ID))
@@ -31,7 +30,7 @@ class WeatherRestHandlerTest {
     fun `will handle celsius correctly`() {
         every { weatherService.getFavouritesAboveTemp(any(),any()) } answers { setOf() }
 
-        weatherRestHandler.handleTemperatureSummaryRequest(listOf(CITY_ID.toString()),TEMPERATURE_CELSIUS.toString(), "CELSIUS")
+        weatherRestHandler.handleTemperatureSummaryRequest(CITY_ID.toString(),TEMPERATURE_CELSIUS.toString(), "CELSIUS")
 
         verify {
             weatherService.getFavouritesAboveTemp(TEMPERATURE_CELSIUS, setOf(CITY_ID))

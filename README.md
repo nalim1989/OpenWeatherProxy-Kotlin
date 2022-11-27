@@ -15,8 +15,14 @@ For simplicity city ids are 1:1 with Open Weather API city ids. In general, it i
 
 #### Run
 ```
-cd weather-app
-../gradlew run
+./gradlew run
+```
+
+#### Example REST 
+```
+GET http://localhost:6655/rest/v1/weather/locations/{cityId}
+
+GET http://localhost:6655/rest/v1/weather/summary?temperature={temp}&locations={cityIds}&unit={unit}
 ```
 
 #### Architecture

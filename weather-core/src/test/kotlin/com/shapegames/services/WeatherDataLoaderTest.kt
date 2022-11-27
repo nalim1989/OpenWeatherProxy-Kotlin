@@ -11,13 +11,11 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import java.util.*
 
-
+private const val CITY_ID=99
+private const val TEMPERATURE = 25.0f
+private val TIME = Date()
 
 class WeatherDataLoaderTest {
-
-    private val CITY_ID=99
-    private val TEMPERATURE = 25.0f
-    private val TIME = Date()
 
     private val dataProducer = mockk<IWeatherDataProducer>()
     private val dataProducers = setOf<IWeatherDataProducer>(dataProducer)
