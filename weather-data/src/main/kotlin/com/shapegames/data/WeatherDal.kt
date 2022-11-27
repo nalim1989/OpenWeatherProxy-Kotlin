@@ -1,6 +1,7 @@
 package com.shapegames.data
 
 import com.shapegames.constants.DATA_EXPIRATION
+import com.shapegames.exceptions.DatabaseException
 import com.shapegames.model.CityWeatherData
 import com.shapegames.model.WeatherData
 import com.shapegames.model.WeatherDataLoad
@@ -24,7 +25,7 @@ class WeatherDal(private val db: Database) {
             return@transaction CityWeatherData(cityId,weatherData,latestLoad.loadTime)
         }
 
-         throw Exception("Something went wrong")
+         throw DatabaseException("Can not fetch latest weather data")
     }
 
     fun fetchLatestLoad(cityId: Int): WeatherDataLoad {
@@ -40,7 +41,7 @@ class WeatherDal(private val db: Database) {
 
         }
 
-        throw Exception("Something went wrong")
+        throw DatabaseException("Can not fetch latest load data")
     }
 
     fun insertWeather(cityId: Int, data:List<WeatherData>, loadTime:Date){
