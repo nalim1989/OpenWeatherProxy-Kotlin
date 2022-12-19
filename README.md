@@ -1,4 +1,4 @@
-# shapeGames-challenge
+# Open Weather Proxy
 
 ### Solution:
 
@@ -26,7 +26,7 @@ GET http://localhost:6655/rest/v1/weather/summary?temperature={temp}&locations={
 ```
 
 #### Architecture
-![ShapeGamesV1-arhitecture](ShapeGamesV1.png)
+![diagramV1-arhitecture](diagramV1.png)
 
 The idea is to introduce a 2-level caching system. Level 1 cache is going to be in-memory which will be used to return the data to business logic. Having in-memory cache increases performance but also increases space complexity, so the limitation on the cache size is introduced. The cache itself takes care to do eviction of those items which are rarely used. Also, if the data is not present in the cache, it calls the loader to load the data from a database or external sources. The load is a suspend function meaning that if multiple threads are trying to get the same resource, the API call will be executed just once.
 
@@ -46,7 +46,7 @@ Since Open Weather data is a single point of failure it would be good to introdu
 
 Also, in case of a huge number of clients, it is possible to run multiple instances of the app (horizontal scaling).
 
-![ShapeGamesV2-arhitecture](ShapeGamesV2.png)
+![diagramV2-arhitecture](diagramV2.png)
 
 e.g. It is possible to introduce a gateway which will then reroute the call to an instance which is responsible for the city region.
 
